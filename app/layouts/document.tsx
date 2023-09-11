@@ -4,6 +4,7 @@ export function Document({
   title,
   description,
   cart,
+  modifiedCart,
   clientEntry,
   tailwindCSS,
   returnTo,
@@ -12,6 +13,7 @@ export function Document({
   title: string;
   description: string;
   cart?: Awaited<ReturnType<typeof getCart>>;
+  modifiedCart?: boolean;
   clientEntry?: string;
   tailwindCSS?: string;
   returnTo: string;
@@ -81,7 +83,7 @@ export function Document({
                   </a>
                 </li>
                 <li>
-                  <Cart cart={cart} returnTo={returnTo} />
+                  <Cart open={modifiedCart} cart={cart} returnTo={returnTo} />
                 </li>
               </ul>
             </nav>

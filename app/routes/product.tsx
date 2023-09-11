@@ -82,6 +82,7 @@ export async function Get(c: Context) {
       title={"DA " + data.product.title}
       description={data.product.description}
       cart={cart}
+      modifiedCart={c.get("modifiedCart")}
       clientEntry={c.get("entry.client")}
       tailwindCSS={c.get("tailwind.css")}
       returnTo={c.req.url}
