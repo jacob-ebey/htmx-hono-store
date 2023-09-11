@@ -1,4 +1,4 @@
-name: Deploy to Fly
+name: Deploy Production
 on:
   push:
     branches:
@@ -11,6 +11,7 @@ jobs:
       # This step checks out a copy of your repository.
       - uses: actions/checkout@v2
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
+      - name: Deploy
+        run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
