@@ -48,7 +48,10 @@ export function Document({
 
         <link rel="stylesheet" href={tailwindCSS || "/static/tailwind.css"} />
 
-        <meta name="htmx-config" content='{"defaultFocusScroll": true}' />
+        <meta
+          name="htmx-config"
+          content='{"defaultFocusScroll": true, "globalViewTransitions": true}'
+        />
 
         {!!clientEntry && <script src={clientEntry} />}
         <script src="/static/hyperscript.0.9.11.js" />
