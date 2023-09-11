@@ -19,6 +19,10 @@ import { Document, Cart } from "../layouts/document";
 import * as NotFound from "./not-found";
 import { URLSearchParams } from "url";
 
+function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+  return value !== null && value !== undefined;
+}
+
 export async function Post(c: Context) {
   const formData = await c.req.formData();
   const variant = await getSelectedVariant(
@@ -110,39 +114,70 @@ function ProductImages({
   const initialImageAlt = selectedVariant.image?.altText || "Product Image 1";
   const seenImages = new Set([initialImage]);
 
-  return (
-    <section
-      id="product-images"
-      class="w-full relative aspect-[8/10] flex overflow-x-auto snap-x snap-mandatory"
-      tabindex="0"
-      aria-label="Product Images"
-      hx-swap-oob={oob}
-    >
-      <img
-        class="snap-start w-full h-full object-cover"
-        src={initialImage}
-        alt={initialImageAlt}
-      />
-      {product.media.nodes.map((media, index) => {
-        if (
-          media.__typename !== "MediaImage" ||
-          !media.image?.url ||
-          seenImages.has(media.image.url + "&width=767")
-        ) {
-          return null;
-        }
-        const newImage = media.image.url + "&width=767";
-        seenImages.add(newImage);
+  const imagesToRender = product.media.nodes
+    .map((media) => {
+      if (media.__typename !== "MediaImage" || !media.image) {
+        return null;
+      }
+      const src = media.image.url + "&width=767";
+      if (seenImages.has(src)) {
+        return null;
+      }
+      seenImages.add(src);
+      return {
+        src,
+        alt: media.alt || "Product Image " + seenImages.size,
+      };
+    })
+    .filter(notEmpty);
 
-        return (
+  return (
+    <section id="product-images" hx-swap-oob={oob}>
+      <div class="relative">
+        <div
+          tabindex="0"
+          aria-label="Product Images"
+          class="carousel flex overflow-x-auto snap-x snap-mandatory aspect-[3/4]"
+        >
           <img
-            tabindex="0"
-            alt={media.alt || "Product Image " + seenImages.size}
-            class="snap-start w-full h-full object-cover"
-            src={newImage}
+            class="snap-start h-full min-h-full w-full min-w-full object-cover"
+            src={initialImage}
+            alt={initialImageAlt}
           />
-        );
-      })}
+
+          {imagesToRender.map((img) => {
+            return (
+              <img
+                class="snap-start h-full min-h-full w-full min-w-full object-cover"
+                src={img.src}
+                alt={img.alt}
+              />
+            );
+          })}
+        </div>
+
+        {imagesToRender.length > 0 && (
+          <div
+            class="absolute bottom-0 left-0 right-0 flex flex-wrap justify-center"
+            _="
+              on click if target.tagName is 'BUTTON'
+                set index to Array.from(target.parentElement.children).indexOf(target)
+                set carousel to previous .carousel
+                set images to carousel.querySelectorAll('img.snap-start')
+                set image to images[index]
+                if image
+                  go to left of image smoothly
+                end
+              end
+            "
+          >
+            <button aria-label={`go to ${initialImageAlt}`}>⚪️</button>
+            {imagesToRender.map((img) => {
+              return <button aria-label={`go to ${img.alt}`}>⚪️</button>;
+            })}
+          </div>
+        )}
+      </div>
     </section>
   );
 }

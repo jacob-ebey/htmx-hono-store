@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { serveStatic } from "hono/bun";
+import { etag } from "hono/etag";
 
 import { cartMiddleware } from "./app/middleware/cart";
 import { clientBuildMiddleware } from "./app/middleware/client-build";
@@ -21,7 +22,7 @@ app.get(
   },
   serveStatic()
 );
-app.use("*", clientBuildMiddleware, cartMiddleware);
+app.use("*", etag(), clientBuildMiddleware, cartMiddleware);
 app.get("/", Home.Get);
 app.get("/products", Products.Get);
 app.post("/product/:handle", Product.Post);

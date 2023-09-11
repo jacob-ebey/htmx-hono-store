@@ -669,8 +669,8 @@ video {
   display: none;
 }
 
-.aspect-\[8\/10\] {
-  aspect-ratio: 8/10;
+.aspect-\[3\/4\] {
+  aspect-ratio: 3/4;
 }
 
 .h-24 {
@@ -705,6 +705,10 @@ video {
   max-height: 100vh;
 }
 
+.min-h-full {
+  min-height: 100%;
+}
+
 .w-24 {
   width: 6rem;
 }
@@ -727,6 +731,10 @@ video {
 
 .w-screen {
   width: 100vw;
+}
+
+.min-w-full {
+  min-width: 100%;
 }
 
 .flex-1 {
@@ -775,6 +783,10 @@ video {
 
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
 }
 
 .items-center {
@@ -1002,6 +1014,10 @@ video {
   --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 .transition {
